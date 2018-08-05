@@ -2,7 +2,7 @@
   <div class="calendar"> 
     <div class="month">
       <ul>
-        <li class="prev"><button class="calendar__prev calendar__nav" ></button></li>
+        <li class="prev"><button @click="isSelected(15)" class="calendar__prev calendar__nav" ></button></li>
         <li class="next"><button class="calendar__next calendar__nav" ></button></li>
         <li><span style="font-size:14px; "> {{year}} </span><br> <span style="font-size:18px;font-weight:bold">{{date_formated}}</span> </li>
       </ul>
@@ -11,15 +11,11 @@
       <li v-for="day in days" v-bind:key="day.index" >{{day}}</li>
     </ul>
     <ul class="days">
-      <li v-for="i in month.getWeekStart()" v-bind:key="i"> </li>
-
-      <li></li>
-      <li></li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li><span class="active">10</span></li>
-      <li>11</li>
+      <li v-for="i in month.getWeekStart()" v-bind:key="i+'01'"> </li>
+      <li v-for="day in month.getDays()" @click="selectionOf(day)" v-bind:key="day+'0'" :class="{selected : isSelected(day)}" class="day_elt" >
+        <span class="days_effect"></span>
+        <span class="days_text"> {{day.format('D')}} </span>
+      </li>
     </ul>
 
   </div>
@@ -40,16 +36,20 @@ export default {
   },
   computed:{
     year(){
-      
-      console.log(this.month.getDays());
       return this.date.format('YYYY')
     },
     date_formated(){
+      //console.log(this.date.format('dddd DD MMM'));
       return this.date.format('dddd DD MMM')
     }
   },
   methods:{
-    showDatepicker(){
+    isSelected(day){
+      return this.date.unix() === day.unix()
+    },
+    selectionOf(day){
+      console.log(day)
+      this.date = day.clone()
     }
   }
 }
@@ -60,6 +60,7 @@ export default {
   
   .calendar{
     width: 300px;
+    box-shadow: rgba(0, 1, 1 , 0.4) -1px 0px 12px;
     display:flex;
     position: absolute;
     left: auto;
@@ -113,25 +114,67 @@ export default {
     display: inline-block;
     width: 14%;
     color: #666;
-    text-align: center;
   }
 
   /* Days (1-31) */
   .days {
     padding: 10px 0;
     background: #eee;
+    cursor: pointer;
     margin: 0;
+    text-align: center;
   }
 
   .days li {
+    position: relative;
     list-style-type: none;
     display: inline-block;
-    width: 13%;
+    width: 13.5%;
     text-align: center;
-    margin-bottom: 5px;
-    font-size:12px;
-    clear: both;
-    color: #777;
+    margin-bottom: 15px;
+    font-size:13px;
+    transition: all 500ms cubic-bezier(0.23);
+  }
+
+
+
+
+
+  .days li .days_effect {
+    position: absolute;
+    top: -4px;
+    left: 8px;
+    width:20px;
+    height: 20px;
+    padding:3px;
+    border-radius: 50%;
+    background-color: rgb(0, 151, 167 );
+    transition: all 500ms cubic-bezier(0.23);
+    transform:scale(0);
+    opacity: 0;
+  }
+
+  
+  /* Hi hover */
+  .days li:hover .days_effect {
+    transform: scale(1);
+    opacity: 1;
+  }
+
+  .days li.selected{
+    color: white;
+    z-index:1000;
+  }
+
+  .days li.selected .days_effect {
+    transform: scale(1);
+    opacity: 1;
+    z-index: 15;
+  } 
+
+  .days li:hover .days_text {
+    color: white;
+    font-weight:bold;
   }
 
 
@@ -149,7 +192,7 @@ export default {
         position: relative;
         top:50%;
         border:none;
-        left: 10px;
+        left: 5px;
         cursor: pointer;
         opacity: 0.4;
         background: url(../assets/prev.png) 40px 40px;
@@ -166,7 +209,7 @@ export default {
     }
 
     .calendar__next{
-        right: 10px;
+        right: 5px;
         left: auto;
         background-image: url(../assets/next.png)
     }

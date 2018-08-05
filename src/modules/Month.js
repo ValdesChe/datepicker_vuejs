@@ -22,7 +22,8 @@ export default class Month {
     }
 
     getDays() {
-        return moment.range(this.start, this.end)
+        console.log(Array.from(moment.range(this.start, this.end).by('days', { step: 1 })));
+        return Array.from(moment.range(this.start, this.end).by('days', { step: 1 }));
     }
 
 }
