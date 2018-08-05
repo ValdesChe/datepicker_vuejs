@@ -1,21 +1,32 @@
 <template>
-  <div>
-    <input type="text" @focus="showDatepicker" @keyup.esc="hideDatepicker" id="">
-    <calendar v-show="active"  ></calendar>
+  <div class="datepicker">
+    <input type="text" @focus="showDatepicker" :value="date_formated" @keyup.esc="hideDatepicker"  id="">
+    <calendar v-show="active" v-bind:date='date' ></calendar>
   </div>
 </template>
 
 <script>
 
 import calendar from './calendar'
+import moment from 'moment'
+moment.locale('fr')
 
 export default {
   name: 'datepicker',
+  props:{
+    valeur:{type: String, required: true},
+    format:{type: String, default:'YYYY-MM-DD'},
+  },
+  computed:{
+    date_formated(){
+      return moment(this.valeur).format(this.format)
+    }
+  },
   components:{calendar},
   data () {
     return {
       active:false,
-      msg: 'Welcome to Your Vue.js App'
+      date : moment(this.valeur , 'YYYY-MM-DD')
     }
   },
   methods:{
@@ -31,6 +42,8 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .datepicker{
+    position:relative;
+  }
 
 </style>

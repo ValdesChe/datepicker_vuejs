@@ -2,46 +2,19 @@
   <div class="calendar"> 
     <div class="month">
       <ul>
-        <li class="prev"><button >&#10094;</button></li>
-        <li class="next"><button >&#10095;</button></li>
-        <li>August<br><span style="font-size:18px">2017</span></li>
+        <li class="prev"><button class="calendar__prev calendar__nav" ></button></li>
+        <li class="next"><button class="calendar__next calendar__nav" ></button></li>
+        <li><span style="font-size:14px; "> {{year}} </span><br> <span style="font-size:18px;font-weight:bold">{{date_formated}}</span> </li>
       </ul>
     </div>
     <ul class="weekdays">
-      <li>Mo</li>
-      <li>Tu</li>
-      <li>We</li>
-      <li>Th</li>
-      <li>Fr</li>
-      <li>Sa</li>
-      <li>Su</li>
+      <li v-for="day in days" v-bind:key="day.index" >{{day}}</li>
     </ul>
     <ul class="days">
-      <li>1</li>
-      <li>2</li>
-      <li>3</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>9</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
-      <li>7</li>
-      <li>8</li>
-      <li>8</li>
-      <li>9</li>
-      <li>4</li>
-      <li>5</li>
-      <li>6</li>
+      <li v-for="i in month.getWeekStart()" v-bind:key="i"> </li>
+
+      <li></li>
+      <li></li>
       <li>7</li>
       <li>8</li>
       <li>9</li>
@@ -53,16 +26,30 @@
 </template>
 
 <script>
+
+import Month from './../modules/Month.js';
 export default {
   name: 'calendar',
+  props:['date'],
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App'
+      months: ['Janvier', 'Fevrier' , 'Mars' , 'Avril' , 'Mai' , 'Juin' , 'Juillet' ],
+      days: ['Lun', 'Mar' , 'Mer' , 'Jeu' , 'Ven' , 'Sam' , 'Dim' ],
+      month: new Month(this.date.month() , this.date.year())
+    }
+  },
+  computed:{
+    year(){
+      
+      console.log(this.month.getDays());
+      return this.date.format('YYYY')
+    },
+    date_formated(){
+      return this.date.format('dddd DD MMM')
     }
   },
   methods:{
     showDatepicker(){
-      alert("some") 
     }
   }
 }
@@ -76,6 +63,7 @@ export default {
     display:flex;
     position: absolute;
     left: auto;
+    top: 100%;
     flex-direction: column;
   }
 
@@ -97,7 +85,6 @@ export default {
   .month ul li {
     color: white;
     font-size: 20px;
-    text-transform: uppercase;
     letter-spacing: 3px;
   }
 
@@ -124,7 +111,7 @@ export default {
 
   .weekdays li {
     display: inline-block;
-    width: 13%;
+    width: 14%;
     color: #666;
     text-align: center;
   }
@@ -144,14 +131,44 @@ export default {
     margin-bottom: 5px;
     font-size:12px;
     clear: both;
-    background: pink; 
     color: #777;
   }
 
+
   /* Highlight the "current" day */
   .days li .active {
+    
     padding: 5px;
     background: #1abc9c;
     color: white !important
   }
+
+
+  
+    .calendar__nav{
+        position: relative;
+        top:50%;
+        border:none;
+        left: 10px;
+        cursor: pointer;
+        opacity: 0.4;
+        background: url(../assets/prev.png) 40px 40px;
+        width:40px;
+        height: 40px;
+    }
+    
+    .calendar__nav:hover{
+        opacity: 0.9;
+    }
+
+    .calendar__prev{
+        
+    }
+
+    .calendar__next{
+        right: 10px;
+        left: auto;
+        background-image: url(../assets/next.png)
+    }
+
 </style>
