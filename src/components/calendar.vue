@@ -2,8 +2,8 @@
   <div class="calendar"> 
     <div class="month">
       <ul>
-        <li class="prev"><button @click="isSelected(15)" class="calendar__prev calendar__nav" ></button></li>
-        <li class="next"><button class="calendar__next calendar__nav" ></button></li>
+        <li class="prev"><button @click="prevMonth" class="calendar__prev calendar__nav" ></button></li>
+        <li class="next"><button @click="nextMonth" class="calendar__next calendar__nav" ></button></li>
         <li><span style="font-size:14px; "> {{year}} </span><br> <span style="font-size:18px;font-weight:bold">{{date_formated}}</span> </li>
       </ul>
     </div>
@@ -12,11 +12,15 @@
     </ul>
     <ul class="days">
       <li v-for="i in month.getWeekStart()" v-bind:key="i+'01'"> </li>
-      <li v-for="day in month.getDays()" @click="selectionOf(day)" v-bind:key="day+'0'" :class="{selected : isSelected(day)}" class="day_elt" >
+      <li v-for="day in month.getDays()" @click="selectionOf(day)" v-bind:key="day+'0'" >
         <span class="days_effect"></span>
-        <span class="days_text"> {{day.format('D')}} </span>
+        <span class="days_text" :class="{active : isSelected(day)}"> {{day.format('D')}} </span>
       </li>
     </ul>
+    <div class="footer">
+       <button @click="cancelModif" class="button cancel">Cancel</button>
+       <button @click="saveModif" class="button save">Valider</button>
+    </div>
 
   </div>
 </template>
@@ -48,8 +52,37 @@ export default {
       return this.date.unix() === day.unix()
     },
     selectionOf(day){
-      console.log(day)
       this.date = day.clone()
+    },
+    cancelModif(){
+
+    },
+    saveModif(){
+
+    },
+    nextMonth(){
+      let month  = this.month.month
+      let year  = this.month.year
+      
+      month++
+      if(month > 11){
+        month = 0
+        year++
+      }
+      this.month = new Month(month,year)
+    },
+    prevMonth(){
+      let month  = this.month.month
+      let year  = this.month.year
+      
+      month--
+      if(month < 0){
+        month = 11
+        year--
+      }
+      
+      this.month = new Month(month,year)
+
     }
   }
 }
@@ -106,13 +139,13 @@ export default {
     margin: 0;
    /*  padding: 10px 0; */
     width: 100%;
-    padding: 7px 0px;
+    padding: 10px 0px;
     background-color:#ddd;
   }
 
   .weekdays li {
     display: inline-block;
-    width: 14%;
+    width: 14.2%;
     color: #666;
   }
 
@@ -122,24 +155,18 @@ export default {
     background: #eee;
     cursor: pointer;
     margin: 0;
-    text-align: center;
   }
 
   .days li {
     position: relative;
     list-style-type: none;
     display: inline-block;
-    width: 13.5%;
+    width: 14%;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size:13px;
-    transition: all 500ms cubic-bezier(0.23);
+    transition: all 1s cubic-bezier(0.53);
   }
-
-
-
-
-
   .days li .days_effect {
     position: absolute;
     top: -4px;
@@ -149,54 +176,64 @@ export default {
     padding:3px;
     border-radius: 50%;
     background-color: rgb(0, 151, 167 );
-    transition: all 500ms cubic-bezier(0.23);
+    transition: all 1s cubic-bezier(0.53);
     transform:scale(0);
     opacity: 0;
+    z-index: 10;
   }
-
-  
-  /* Hi hover */
+  .days li .days_text {
+    color: rgb(0, 100, 100) !important; 
+    opacity: 1;
+    z-index: 150;
+    
+    transition: all 2s cubic-bezier(0.53);
+  } 
+  .days li:hover .days_text {
+    color: blue!important;/* 
+    text-shadow: #a2ce 0px 1px 0px; */
+    z-index: 1000 !important;
+    font-weight: 100;
+  }
   .days li:hover .days_effect {
     transform: scale(1);
+    opacity: 0.7 !important;
+    z-index: 200 !important;
+  }
+  /* 
+  .days li.selected .days_text {
+    color: lightcoral !important; 
     opacity: 1;
-  }
-
-  .days li.selected{
-    color: white;
-    z-index:1000;
-  }
-
+    z-index: 15000 !important;
+  } 
   .days li.selected .days_effect {
     transform: scale(1);
-    opacity: 1;
-    z-index: 15;
-  } 
-
-  .days li:hover .days_text {
-    color: white;
-    font-weight:bold;
-  }
-
+    opacity: 0.8;
+    z-index: 1 !important;
+  }  */
 
   /* Highlight the "current" day */
   .days li .active {
-    
     padding: 5px;
     background: #1abc9c;
     color: white !important
   }
 
-
-  
-    .calendar__nav{
-        position: relative;
-        top:50%;
-        border:none;
-        left: 5px;
-        cursor: pointer;
-        opacity: 0.4;
-        background: url(../assets/prev.png) 40px 40px;
-        width:40px;
+  /* Highlight the "current" day */
+  .days li:hover .active {
+    padding: 5px;
+    background: #1abc9c;
+    color: white !important
+  }
+  .calendar__nav{
+    position: relative;
+    top:50%;
+    border:none;
+    left: 5px;
+    cursor: pointer;
+    opacity: 0.4;
+    -webkit-appearance: none;
+    background: url(../assets/prev.png) 40px 40px;
+    width:40px;
         height: 40px;
     }
     
@@ -213,5 +250,26 @@ export default {
         left: auto;
         background-image: url(../assets/next.png)
     }
+  
+  .button{
+    padding: 10px;
+    line-height: 16px;
+    -webkit-appearance: none;
+    border:none;
+    float: right;
+    color:white;
+    background: #ddd;
+  }
 
+  .cancel{
+    border-left: 2px solid tan;
+  }
+
+  .cancel:hover{
+    background: orange;
+  }
+
+  .save:hover{
+    background: greenyellow;  
+  }
 </style>
