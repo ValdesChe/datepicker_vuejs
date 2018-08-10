@@ -15,7 +15,7 @@
           </button>
         </li>
         
-        <li class="current__month"><span style="font-size:16px; "> {{month.getFormated()}} </span> </li>
+        <li class="current__month"><span style="font-size:15px; "> {{month.getFormated()}} </span> </li>
       
         <li class="next">
           <button @click="nextMonth" class="calendar__next calendar__nav" >
@@ -27,7 +27,7 @@
       </ul>
     </div>
     <ul class="weekdays">
-      <li v-for="day in days" v-bind:key="day.index" >{{day}}</li>
+      <li v-for="day in days" v-bind:key="day.index">{{day}}</li>
     </ul>
     <ul class="days">
       <li v-for="i in month.getWeekStart()" v-bind:key="i+'01'"> </li>
@@ -38,7 +38,7 @@
     </ul>
     <div class="footer">
        <button @click="cancelModif" class="button cancel">Cancel</button>
-       <button @click="saveModif" class="button save">Valider</button>
+       <button @click="submit" class="button save">Valider</button>
     </div>
 
   </div>
@@ -71,14 +71,14 @@ export default {
       return this.date.unix() === day.unix()
     },
     selectionOf(day){
-      this.$emit('clickDate',day.clone())
+      this.$emit('clickDate', day.clone())
       //this.date = day.clone()
     },
     cancelModif(){
 
     },
-    saveModif(){
-      this.$emit('save',this.date)
+    submit(){
+      this.$emit('change',this.date)
     },
     nextMonth(){
       let month  = this.month.month
