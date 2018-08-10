@@ -1,0 +1,214 @@
+.calendar {
+    width: 300px;
+    box-shadow: rgba(0, 1, 1, 0.4) -1px 0px 12px;
+    display: flex;
+    position: absolute;
+    left: auto;
+    top: 100%;
+    flex-direction: column;
+}
+
+ul {
+    list-style-type: none;
+}
+
+
+/* Month header */
+
+.month {
+    display: flex;
+    flex-direction: column;
+    padding: 5px 0px;
+    background: #1abc9c;
+}
+
+
+/* Month list */
+
+.month ul {
+    display: block;
+    margin: 0;
+    padding: 5px;
+    text-align: center;
+}
+
+.month .actual_date {
+    display: block;
+    background: #666;
+    margin: 0;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.month .actual_date::first-letter {}
+
+.month ul li {
+    color: white;
+    font-size: 20px;
+    letter-spacing: 3px;
+}
+
+
+/* Previous button inside month header */
+
+.calendar__nav {
+    position: absolute;
+    top: 21%;
+    border: none;
+    left: 5px;
+    cursor: pointer;
+    background: none;
+    opacity: 0.4;
+    -webkit-appearance: none;
+    width: 40px;
+    height: 40px;
+    padding: 4px;
+}
+
+.calendar__nav:hover {
+    opacity: 0.9;
+}
+
+.month .prev {
+    float: left;
+}
+
+
+/* Next button */
+
+.month .next {
+    float: right;
+}
+
+.calendar__next {
+    right: 5px;
+    left: auto;
+}
+
+
+/* Weekdays (Mon-Sun) */
+
+.weekdays {
+    margin: 0;
+    /*  padding: 10px 0; */
+    width: 100%;
+    padding: 5px 0px;
+    background-color: #ddd;
+}
+
+.weekdays li {
+    display: inline-block;
+    width: 14.2%;
+    color: #666;
+}
+
+
+/* Days (1-31) */
+
+.days {
+    padding: 5px 0;
+    background: #eee;
+    cursor: pointer;
+    margin: 0;
+}
+
+.days li {
+    position: relative;
+    list-style-type: none;
+    display: inline-block;
+    width: 14%;
+    text-align: center;
+    margin-bottom: 10px;
+    font-size: 13px;
+    transition: all 1s cubic-bezier(0.53);
+}
+
+.days li .days_effect {
+    position: absolute;
+    top: -4px;
+    left: 8px;
+    width: 20px;
+    height: 20px;
+    padding: 3px;
+    border-radius: 50%;
+    background-color: rgb(0, 151, 167);
+    transition: all 1s cubic-bezier(0.53);
+    transform: scale(0);
+    opacity: 0;
+    z-index: 10;
+}
+
+.days li .days_text {
+    color: rgb(0, 100, 100) !important;
+    opacity: 1;
+    z-index: 150;
+    transition: all 2s cubic-bezier(0.53);
+}
+
+.days li:hover .days_text {
+    color: blue!important;
+    /* 
+    text-shadow: #a2ce 0px 1px 0px; */
+    z-index: 1000 !important;
+    font-weight: 100;
+}
+
+.days li:hover .days_effect {
+    transform: scale(1);
+    opacity: 0.7 !important;
+    z-index: 200 !important;
+}
+
+
+/* 
+  .days li.selected .days_text {
+    color: lightcoral !important; 
+    opacity: 1;
+    z-index: 15000 !important;
+  } 
+  .days li.selected .days_effect {
+    transform: scale(1);
+    opacity: 0.8;
+    z-index: 1 !important;
+  }  */
+
+
+/* Highlight the "current" day */
+
+.days li .active {
+    padding: 5px;
+    background: #1abc9c;
+    color: white !important
+}
+
+
+/* Highlight the "current" day */
+
+.days li:hover .active {
+    padding: 5px;
+    background: #1abc9c;
+    color: white !important
+}
+
+.button {
+    padding: 10px;
+    line-height: 16px;
+    -webkit-appearance: none;
+    border: none;
+    float: right;
+    color: white;
+    background: #ddd;
+}
+
+.cancel {
+    border-left: 2px solid tan;
+}
+
+.cancel:hover {
+    background: orange;
+}
+
+.save:hover {
+    background: greenyellow;
+}

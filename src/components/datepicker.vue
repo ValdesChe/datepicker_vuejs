@@ -1,7 +1,7 @@
 <template>
   <div class="datepicker">
     <input type="text" @focus="showDatepicker" :value="date_formated" @keyup.esc="hideDatepicker"  id="">
-    <calendar v-show="active" v-bind:date='date' ></calendar>
+    <calendar v-show="active" :date='date' v-on:clickDate="selectDate"  v-on:save="saved"></calendar>
   </div>
 </template>
 
@@ -35,6 +35,12 @@ export default {
     },
     hideDatepicker(){
       this.active = false
+    },
+    selectDate(date){
+      this.date = date
+    },
+    saved(date){
+      this.valeur = date
     }
   }
 }

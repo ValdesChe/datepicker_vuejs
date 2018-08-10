@@ -26,4 +26,8 @@ export default class Month {
         return Array.from(moment.range(this.start, this.end).by('days', { step: 1 }));
     }
 
+    getFormated() {
+        return this.start.format('MMMM YYYY')
+    }
+
 }
